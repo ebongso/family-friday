@@ -35,16 +35,20 @@
     document.getElementById('showEmployeeNames').appendChild(ol);
   };
 
-  //Add more employees to localStorage
-  let addToLocalStorage = (newEmployeeName) => {
-    localStorage.setItem('family', localStorage.getItem('family') + ';' + newEmployeeName);
-    console.log(localStorage.getItem('family'));
+  //Add employees to storage
+  let addToStorage = (newEmployeeName) => {
+    if(localStorage) {
+      localStorage.setItem('family', localStorage.getItem('family') + ';' + newEmployeeName);
+      console.log(localStorage.getItem('family'));
+    } else {
+      console.log('Cannot find the local storage. Store to DB...');
+    }
   };
 
   //When the 'Add Employee' button is clicked, store/display the name and clear the field
   let addEmployeeClickEvent = () => {
     const employeeName = document.getElementById('employeeName').value;
-    addToLocalStorage(employeeName);
+    addToStorage(employeeName);
     
     document.getElementById('employeeDisplay').appendChild(createLi(employeeName));
     document.getElementById('employeeName').value = '';
