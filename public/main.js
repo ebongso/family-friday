@@ -40,6 +40,8 @@
   let generateLunchGroupsClickEvent = () => {
     const shuffledNames = group.shuffleNames(names);
     const groups = group.divide(shuffledNames, [], 0, 0, shuffledNames.length);
+    
+    document.getElementById('groups').innerHTML = group.generateDisplay(groups);
   };
 
   //When starting up, the app will load data and show employees.
