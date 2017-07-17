@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "description": "Lunch groups for Apartment List",
   "main": "app.js",
+  "author": "Ervi Bongso",
+  "license": "ISC", 
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Ervi Bongso",
-  "license": "ISC",
   "engines": {
     "node": "6.7.0",
     "npm": "3.9.0"

@@ -19,7 +19,8 @@
   //Add employees to storage
   let addToStorage = (newEmployeeName) => {
     if(localStorage) {
-      const moreFamily = localStorage.getItem('family') + ';' + newEmployeeName;
+      const family = localStorage.getItem('family');
+      const moreFamily = (family && family !== null) ? family + ';' + newEmployeeName : newEmployeeName;
       localStorage.setItem('family', moreFamily);
       names = moreFamily.split(';');
     } else {
@@ -29,19 +30,27 @@
 
   //When the 'Add Employee' button is clicked, store/display the name and clear the field
   let addEmployeeClickEvent = () => {
-    const employeeName = document.getElementById('employeeName').value;
-    addToStorage(employeeName);
+    const employeeName = document.getElementById('employeeName').value.trim();
+    if(employeeName !== '') {
+      addToStorage(employeeName);
     
-    document.getElementById('employeeName').value = '';
-    document.getElementById('message').innerHTML = employeeName + ' has been added!';
+      document.getElementById('employeeName').value = '';
+      document.getElementById('message').innerHTML = employeeName + ' has been added!';
+    } else {
+      document.getElementById('message').innerHTML = 'Please enter a name';      
+    }
   };
 
   //Time to shuffle names and divide them into lunch groups!
   let generateLunchGroupsClickEvent = () => {
-    const shuffledNames = group.shuffleNames(names);
-    const groups = group.divide(shuffledNames, [], 0, 0, shuffledNames.length);
-    
-    document.getElementById('groups').innerHTML = group.generateDisplay(groups);
+    if(names.length < MIN) {
+      document.getElementById('message').innerHTML = `Please add at least ${MIN} employees`;
+    } else {
+      const shuffledNames = group.shuffleNames(names);
+      const groups = group.divide(shuffledNames, [], 0, 0, shuffledNames.length);
+      
+      document.getElementById('groups').innerHTML = group.generateDisplay(groups);
+    }
   };
 
   //When starting up, the app will load data and show employees.
