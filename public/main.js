@@ -54,6 +54,7 @@
   let generateLunchGroupsClickEvent = () => {
     const shuffledNames = shuffleNames();
     const groups = divideIntoGroups(shuffledNames, [], 0, 0, shuffledNames.length);
+    console.log(groups);
   };
 
   //Based on Fisher-Yates shuffle algorithm, a random number is generated
@@ -78,22 +79,15 @@
   //It returns the groups in an array containing semi-colon-separated names in each element.
   let divideIntoGroups = (shuffledNames, groups, group, lastPos, totalNames) => {
     if(totalNames > 0) {
-      //Each condition checks ahead to ensure there's still more than 3 people left for each group.
-      if(totalNames - MAX >= MIN || totalNames - MAX === 0) {
-        lastPos += MAX;
-        groups = createGroup(shuffledNames, lastPos, MAX, groups, group);
-        totalNames -= MAX;
-        group++;
-      } else if(totalNames - MID >= MIN || totalNames - MID === 0) {
-        lastPos += MID;
-        groups = createGroup(shuffledNames, lastPos, MID, groups, group);
-        totalNames -= MID;
-        group++;
-      } else if(totalNames - MIN >= MIN || totalNames - MIN === 0) {
-        lastPos += MIN;
-        groups = createGroup(shuffledNames, lastPos, MIN, groups, group);
-        totalNames -= MIN;
-        group++;
+      //Each condition checks ahead to ensure nobody is left out or eats alone.
+      for(let i = MAX; i >= MIN; i--) {
+        if(totalNames - i >= MIN || totalNames - i === 0) {
+          lastPos += i;
+          groups = createGroup(shuffledNames, lastPos, i, groups, group);
+          totalNames -= i;
+          group++;
+          break;
+        }
       }
       //Recursively call the function with the rest of the names.
       return divideIntoGroups(shuffledNames, groups, group, lastPos, totalNames);
