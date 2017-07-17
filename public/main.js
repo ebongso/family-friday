@@ -12,7 +12,7 @@
         names = family.split(';');
       }
     } else {
-      console.log('Cannot find the local storage. Accessing DB...');
+      document.getElementById('message').innerHTML = 'Cannot find the local storage.';
     }
   };
 
@@ -32,9 +32,11 @@
   //Add employees to storage
   let addToStorage = (newEmployeeName) => {
     if(localStorage) {
-      localStorage.setItem('family', localStorage.getItem('family') + ';' + newEmployeeName);
+      const moreFamily = localStorage.getItem('family') + ';' + newEmployeeName;
+      localStorage.setItem('family', moreFamily);
+      names = moreFamily.split(';');
     } else {
-      console.log('Cannot find the local storage. Store to DB...');
+      document.getElementById('message').innerHTML = 'Cannot find the local storage.';
     }
   };
 
@@ -45,14 +47,15 @@
     
     document.getElementById('employeeDisplay').appendChild(createLi(employeeName));
     document.getElementById('employeeName').value = '';
+    document.getElementById('message').innerHTML = employeeName + ' has been added!';
   };
 
   let generateLunchGroupsClickEvent = () => {
-    const shuffledNames = shuffleNames();
+    divideIntoGroups(shuffleNames());
   };
 
   //Based on Fisher-Yates shuffle algorithm, a random number is generated
-  //then the array at the current position is swapped with the position from the random number.
+  //then the array element at the current position is swapped with the random number'.
   let shuffleNames = () => {
     const start = 0;
     let shuffledNames = names.slice(); //Shallow-copy the names array
@@ -67,6 +70,39 @@
       shuffledNames[random] = temp;
     }
     return shuffledNames;
+  };
+
+  let divideIntoGroups = (shuffledNames) => {
+    let totalNames = shuffledNames.length;
+    const max = 5, mid = 4, min = 3;
+    let groups = [];
+    let group = 0;
+    let lastPos = 0;
+    while(totalNames > 0) {
+      if(totalNames - max >= min || totalNames - max === 0) {
+        lastPos += max;
+        for(let i = lastPos - max; i < lastPos; i++) {
+          groups[group] = (groups[group] ? groups[group] + ';' : '') + shuffledNames[i];
+        }
+        totalNames -= max;
+        group++;
+      } else if(totalNames - mid >= min || totalNames - mid === 0) {
+        lastPos += mid;
+        for(let i = lastPos - mid; i < lastPos; i++) {
+          groups[group] = (groups[group] ? groups[group] + ';' : '') + shuffledNames[i];
+        }
+        totalNames -= 4;
+        group++;
+      } else if(totalNames - min >= min || totalNames - min === 0) {
+        lastPos += 3;
+        for(let i = lastPos - min; i < lastPos; i++) {
+          groups[group] = (groups[group] ? groups[group] + ';' : '') + shuffledNames[i];
+        }
+        totalNames -= 3;
+        group++;
+      }
+    }
+    console.log(groups.join('|'));
   };
 
   //When starting up, the app will load data and show employees.
