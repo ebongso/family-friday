@@ -50,8 +50,10 @@
     document.getElementById('message').innerHTML = employeeName + ' has been added!';
   };
 
+  //Time to shuffle names and divide them into lunch groups!
   let generateLunchGroupsClickEvent = () => {
-    divideIntoGroups(shuffleNames());
+    const shuffledNames = shuffleNames();
+    const groups = divideIntoGroups(shuffledNames, [], 0, 0, shuffledNames.length);
   };
 
   //Based on Fisher-Yates shuffle algorithm, a random number is generated
@@ -72,38 +74,41 @@
     return shuffledNames;
   };
 
-  let divideIntoGroups = (shuffledNames) => {
-    let totalNames = shuffledNames.length;
-    const max = 5, mid = 4, min = 3;
-    let groups = [];
-    let group = 0;
-    let lastPos = 0;
-    while(totalNames > 0) {
-      if(totalNames - max >= min || totalNames - max === 0) {
-        lastPos += max;
-        for(let i = lastPos - max; i < lastPos; i++) {
-          groups[group] = (groups[group] ? groups[group] + ';' : '') + shuffledNames[i];
-        }
-        totalNames -= max;
+  //Divide the names already shuffled into groups recursively.
+  //It returns the groups in an array containing semi-colon-separated names in each element.
+  let divideIntoGroups = (shuffledNames, groups, group, lastPos, totalNames) => {
+    if(totalNames > 0) {
+      //Each condition checks ahead to ensure there's still more than 3 people left for each group.
+      if(totalNames - MAX >= MIN || totalNames - MAX === 0) {
+        lastPos += MAX;
+        groups = createGroup(shuffledNames, lastPos, MAX, groups, group);
+        totalNames -= MAX;
         group++;
-      } else if(totalNames - mid >= min || totalNames - mid === 0) {
-        lastPos += mid;
-        for(let i = lastPos - mid; i < lastPos; i++) {
-          groups[group] = (groups[group] ? groups[group] + ';' : '') + shuffledNames[i];
-        }
-        totalNames -= 4;
+      } else if(totalNames - MID >= MIN || totalNames - MID === 0) {
+        lastPos += MID;
+        groups = createGroup(shuffledNames, lastPos, MID, groups, group);
+        totalNames -= MID;
         group++;
-      } else if(totalNames - min >= min || totalNames - min === 0) {
-        lastPos += 3;
-        for(let i = lastPos - min; i < lastPos; i++) {
-          groups[group] = (groups[group] ? groups[group] + ';' : '') + shuffledNames[i];
-        }
-        totalNames -= 3;
+      } else if(totalNames - MIN >= MIN || totalNames - MIN === 0) {
+        lastPos += MIN;
+        groups = createGroup(shuffledNames, lastPos, MIN, groups, group);
+        totalNames -= MIN;
         group++;
       }
+      //Recursively call the function with the rest of the names.
+      return divideIntoGroups(shuffledNames, groups, group, lastPos, totalNames);
+    } else { //no more names left
+      return groups;
     }
-    console.log(groups.join('|'));
   };
+
+  //Create the group by limit, so each group has the specified number of people in it.
+  let createGroup = (shuffledNames, lastPos, limit, groups, group) => {
+    for(let i = lastPos - limit; i < lastPos; i++) {
+      groups[group] = (groups[group] ? groups[group] + ';' : '') + shuffledNames[i];
+    }
+    return groups;
+  }
 
   //When starting up, the app will load data and show employees.
   let init = () => {
