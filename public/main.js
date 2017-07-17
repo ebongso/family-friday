@@ -16,19 +16,6 @@
     }
   };
 
-  //Show the total number of employees and employee names.
-  let showEmployees = () => {    
-    let span = document.createElement('span');
-    span.appendChild(document.createTextNode('Total: ' + names.length + ' employees'));
-    let ol = document.createElement('ol');
-    ol.setAttribute('id', 'employeeDisplay');
-    names.forEach(n => {      
-      ol.appendChild(createLi(n));
-    });
-    document.getElementById('showEmployeeNames').appendChild(span);
-    document.getElementById('showEmployeeNames').appendChild(ol);
-  };
-
   //Add employees to storage
   let addToStorage = (newEmployeeName) => {
     if(localStorage) {
@@ -45,7 +32,6 @@
     const employeeName = document.getElementById('employeeName').value;
     addToStorage(employeeName);
     
-    document.getElementById('employeeDisplay').appendChild(createLi(employeeName));
     document.getElementById('employeeName').value = '';
     document.getElementById('message').innerHTML = employeeName + ' has been added!';
   };
@@ -107,7 +93,6 @@
   //When starting up, the app will load data and show employees.
   let init = () => {
     loadEmployees();
-    showEmployees();
     document.getElementById('addEmployee').addEventListener('click', addEmployeeClickEvent);
     document.getElementById('generateLunchGroups').addEventListener('click', generateLunchGroupsClickEvent);
   };
