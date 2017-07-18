@@ -1,4 +1,4 @@
-# family-friday
+# family-friday (https://family-friday.herokuapp.com/)
 * This application allows users to enter employee names one by one into the system. There should be at least 3 employees in the system. A lunch group can then be generated. 
 * The employee names are stored in the Local Storage (if detected). Everytime the system is refreshed or restarted, it will load the employee names from the Local Storage into the system.
 * Employee names are shuffled then divided into groups when the "Generate Lunch Groups" button is clicked.
