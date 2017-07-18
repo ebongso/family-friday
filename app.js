@@ -21,7 +21,7 @@ server.use(bodyParser.urlencoded({ extended: false }));
 
 server.use('/', index);
 
-const port = 3000;
-server.listen(port, () => {
-  console.log('server is listening on port ' + port);
+//For Heroku to start the app correctly
+server.listen(process.env.PORT || port, () => {
+  console.log('server is ready');
 });
