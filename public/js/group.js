@@ -31,6 +31,7 @@ let group = (() => {
     try {
       if(totalNames > 0) {
         //Each condition checks ahead to ensure nobody is left out or eats alone.
+        //This approach is getting large groups first then small groups because the more the merrier!
         for(let i = MAX; i >= MIN; i--) {
           if(totalNames - i >= MIN || totalNames - i === 0) {
             lastPos += i;
