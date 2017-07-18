@@ -27,9 +27,9 @@
       document.getElementById('message').innerHTML = 'Cannot find the local storage.';
     }
   };
-
-  //When the 'Add Employee' button is clicked, store/display the name and clear the field
-  let addEmployeeClickEvent = () => {
+  
+  //Store/display the name and clear the field
+  let addEmployee = () => {
     const employeeName = document.getElementById('employeeName').value.trim();
     if(employeeName !== '') {
       addToStorage(employeeName);
@@ -41,6 +41,18 @@
     }
   };
 
+  //The 'Add Employee' button is clicked
+  let addEmployeeClickEvent = () => {
+    addEmployee();
+  };
+
+  //After entering the employee name, detect the keyup event
+  let addEmployeeKeyUpEvent = (e) => {
+    if(e.keyCode === 13) { //the Enter key is pressed
+      addEmployee();
+    }
+  };
+
   //Time to shuffle names and divide them into lunch groups!
   let generateLunchGroupsClickEvent = () => {
     if(names.length < MIN) {
@@ -49,7 +61,9 @@
       const shuffledNames = group.shuffleNames(names);
       const groups = group.divide(shuffledNames, [], 0, 0, shuffledNames.length);
       
+
       document.getElementById('groups').innerHTML = group.generateDisplay(groups);
+      $('#groups').fadeIn('slow');
     }
   };
 
@@ -58,6 +72,7 @@
     loadEmployees();
     document.getElementById('addEmployee').addEventListener('click', addEmployeeClickEvent);
     document.getElementById('generateLunchGroups').addEventListener('click', generateLunchGroupsClickEvent);
+    document.getElementById('employeeName').addEventListener('keyup', addEmployeeKeyUpEvent);
   };
 
   init();
